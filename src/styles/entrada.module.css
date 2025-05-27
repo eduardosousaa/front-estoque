@@ -1,0 +1,101 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background-color: white;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.header_h1 {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.tabs {
+  display: flex;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.tab {
+  padding: 0.75rem 2rem;
+  color: #999;
+  font-weight: 500;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.tab:hover {
+  color: #009E8B;
+}
+
+.tabActive {
+  padding: 0.75rem 2rem;
+  color: #009E8B;
+  font-weight: 600;
+  cursor: pointer;
+  border-bottom: 2px solid #009E8B;
+}
+
+.registrarButton {
+  background-color: #009E8B;
+  border: none;
+  border-radius: 6px;
+  padding: 0.5rem 1.5rem;
+  margin-bottom: 2rem;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+}
+
+.registrarButton:hover {
+  background-color: #008c7a;
+}
+
+.inputWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.inputWrapper input {
+  width: 100%;
+  padding: 0.6rem 0.75rem 0.6rem 2.5rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  transition: border-color 0.3s ease;
+}
+
+.inputWrapper input:focus {
+  outline: none;
+  border-color: #009E8B;
+}
+
+.iconeBusca {
+  position: absolute;
+  left: 0.75rem;
+  color: #999;
+  z-index: 1;
+}
+
+.emptyState {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: #999;
+}
+
+.emptyState p {
+  margin: 1rem 0 0.5rem;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #666;
+}
+
+.emptyState span {
+  font-size: 0.9rem;
+  color: #999;
+}
