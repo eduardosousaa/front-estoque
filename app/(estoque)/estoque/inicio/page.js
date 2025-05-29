@@ -15,10 +15,10 @@ import PaginationStyle from '@/components/ElementsUI/PaginationStyle';
 import Constantes from '../../../../src/Constantes';
 import { parseCookies } from 'nookies';
 
-const API_BASE_URL = 'http://frota-api.smartdatasolutions.com.br';
+// const API_BASE_URL = 'http://frota-api.smartdatasolutions.com.br'; // Esta linha deve permanecer comentada ou ser removida
 
-export default function HomePage() { 
-  /*  IMPORTANTE: Aqui Salvo como cookie está o token2, da conta que vc recebe os dados   */
+export default function HomePage() {
+  /* IMPORTANTE: Aqui Salvo como cookie está o token2, da conta que vc recebe os dados   */
   const { "token2": token2 } = parseCookies();
 
   const {
@@ -67,15 +67,16 @@ export default function HomePage() {
         params.append('categoryId', filters.categoryId.trim());
       }
 
-      /* const response = await fetch(`${API_BASE_URL}/product?${params}`, { */
-      const response = await fetch(Constantes.url + `/product?${params}`, {
+      // REMOVEMOS O BLOCO 'fetch = async () => { ... }' INCORRETO
+      // E DESCOMENTAMOS O FETCH ORIGINAL, GARANTINDO QUE 'response' SEJA DEFINIDO.
+      const response = await fetch(Constantes.url + `product?${params}`, { // Use Constantes.url para a URL base
         method: 'GET',
         headers: {
           'accept': 'application/json',
           'Content-Type': 'application/json',
           /* IMPORTANTE: Aqui vai no authentication o token2 e o modulo que vc vai utilizar o de estoque(STOCK) */
-          "Authorization": "Bearer " + token2,
-          "Module": "STOCK",
+          "Authorization": "Bearer " + token2, // Adicione o token de autenticação
+          "Module": "STOCK", // Adicione o módulo correto para estoque
         },
       });
 
@@ -112,11 +113,14 @@ export default function HomePage() {
 
   const fetchCategorias = async () => {
     try {
-      const response = await fetch(`${API_BASE_URL}/category`, {
+      // SUBSTITUÍMOS 'API_BASE_URL' por 'Constantes.url' E ADICIONAMOS OS CABEÇALHOS
+      const response = await fetch(Constantes.url + `/category`, { // Use Constantes.url para a URL base
         method: 'GET',
         headers: {
           'accept': 'application/json',
           'Content-Type': 'application/json',
+          "Authorization": "Bearer " + token2, // Adicione o token de autenticação
+          "Module": "STOCK", // Adicione o módulo correto para estoque
         },
       });
 
