@@ -1,0 +1,41 @@
+/* [project]/app/(estoque)/home.module.css [app-client] (css) */
+.home-module__QeswPG__contentArea {
+  width: 86%;
+  height: 100vh;
+  margin-left: 150px;
+}
+
+.home-module__QeswPG__expanded {
+  width: 81.3%;
+  margin-left: 250px;
+}
+
+.home-module__QeswPG__container {
+  box-sizing: border-box;
+  background-color: #f8ffff;
+  border-radius: 25px;
+  align-items: center;
+  max-width: 100%;
+  height: auto;
+  margin-top: 100px;
+  margin-left: 40px;
+  padding: 20px;
+  box-shadow: 0 0 39.5px #0003;
+}
+
+.home-module__QeswPG__container h1 {
+  color: #000;
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 2.5rem;
+}
+
+.home-module__QeswPG__heading {
+  color: #000;
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 2.5rem;
+  font-weight: bold;
+}
+
+/*# sourceMappingURL=app_%28estoque%29_home_module_css_f9ee138c._.single.css.map*/

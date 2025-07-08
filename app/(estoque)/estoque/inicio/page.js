@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import styles from './inicio.module.css';
 import { useForm } from "react-hook-form";
 import { useRouter } from 'next/navigation';
@@ -11,14 +11,11 @@ import InputForm from '@/components/ElementsUI/InputForm';
 import TableStyle from '@/components/ElementsUI/TableStyle';
 import PaginationStyle from '@/components/ElementsUI/PaginationStyle';
 
-/* IMPORTANTE: a variavel da url da api e a biblioteca de onde vem os cookies */
 import Constantes from '../../../../src/Constantes';
 import { parseCookies } from 'nookies';
 
-// const API_BASE_URL = 'http://frota-api.smartdatasolutions.com.br'; // Esta linha deve permanecer comentada ou ser removida
 
 export default function HomePage() {
-  /* IMPORTANTE: Aqui Salvo como cookie está o token2, da conta que vc recebe os dados   */
   const { "token2": token2 } = parseCookies();
 
   const {
@@ -41,7 +38,7 @@ export default function HomePage() {
   const [busca, setBusca] = useState('');
   const [tipoSelecionado, setTipoSelecionado] = useState('');
   const [produtos, setProdutos] = useState([]);
-  const [categorias, setCategorias] = useState([]);
+  const [allProductTypes, setAllProductTypes] = useState([]);
   const [loading, setLoading] = useState(false);
   const [requestError, setRequestError] = useState('');
 
@@ -49,6 +46,29 @@ export default function HomePage() {
   const [size, setSize] = useState(5);
   const [totalElements, setTotalElements] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
+
+  const fetchAllProductTypes = async () => {
+    try {
+      const response = await fetch(Constantes.url + `product/product_type`, {
+        method: 'GET',
+        headers: {
+          'accept': 'application/json',
+          'Content-Type': 'application/json',
+          "Authorization": "Bearer " + token2,
+          "Module": "STOCK",
+        },
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setAllProductTypes(Array.isArray(data) ? data : data.content || []);
+      } else {
+        console.error("Erro ao buscar todos os tipos de produto:", response.status, response.statusText);
+      }
+    } catch (err) {
+      console.error('Erro ao buscar todos os tipos de produto:', err);
+    }
+  };
+
 
   const fetchProdutos = async (page = 0, pageSize = 5, filters = {}) => {
     setLoading(true);
@@ -64,19 +84,16 @@ export default function HomePage() {
       }
 
       if (filters.categoryId && filters.categoryId.trim()) {
-        params.append('categoryId', filters.categoryId.trim());
+        params.append('productTypeId', filters.categoryId.trim());
       }
 
-      // REMOVEMOS O BLOCO 'fetch = async () => { ... }' INCORRETO
-      // E DESCOMENTAMOS O FETCH ORIGINAL, GARANTINDO QUE 'response' SEJA DEFINIDO.
-      const response = await fetch(Constantes.url + `product?${params}`, { // Use Constantes.url para a URL base
+      const response = await fetch(Constantes.url + `product?${params}`, {
         method: 'GET',
         headers: {
           'accept': 'application/json',
           'Content-Type': 'application/json',
-          /* IMPORTANTE: Aqui vai no authentication o token2 e o modulo que vc vai utilizar o de estoque(STOCK) */
-          "Authorization": "Bearer " + token2, // Adicione o token de autenticação
-          "Module": "STOCK", // Adicione o módulo correto para estoque
+          "Authorization": "Bearer " + token2,
+          "Module": "STOCK",
         },
       });
 
@@ -85,6 +102,8 @@ export default function HomePage() {
       }
 
       const data = await response.json();
+
+      console.log('Dados completos retornados pelo endpoint GET de produtos:', data);
 
       if (data.content) {
         setProdutos(data.content);
@@ -111,32 +130,12 @@ export default function HomePage() {
     }
   };
 
-  const fetchCategorias = async () => {
-    try {
-      // SUBSTITUÍMOS 'API_BASE_URL' por 'Constantes.url' E ADICIONAMOS OS CABEÇALHOS
-      const response = await fetch(Constantes.url + `/category`, { // Use Constantes.url para a URL base
-        method: 'GET',
-        headers: {
-          'accept': 'application/json',
-          'Content-Type': 'application/json',
-          "Authorization": "Bearer " + token2, // Adicione o token de autenticação
-          "Module": "STOCK", // Adicione o módulo correto para estoque
-        },
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setCategorias(Array.isArray(data) ? data : data.content || []);
-      }
-    } catch (err) {
-      console.error('Erro ao buscar categorias:', err);
-    }
-  };
-
   useEffect(() => {
-    fetchProdutos(0, size);
-    fetchCategorias();
-  }, []);
+    if (token2) {
+      fetchProdutos(0, size);
+      fetchAllProductTypes();
+    }
+  }, [token2]);
 
   const onSubmit = (data) => {
     const filters = {
@@ -176,10 +175,15 @@ export default function HomePage() {
     fetchProdutos(0, newSize, filters);
   };
 
-  const categoriasOptions = categorias.map(cat => ({
-    value: cat.id,
-    label: cat.name || cat.nome || cat.description
-  }));
+  const categoriasOptions = useMemo(() => {
+    return [
+      { value: '', label: '--Todas as categorias--' },
+      ...allProductTypes.map(type => ({
+        value: type.id,
+        label: type.name
+      }))
+    ];
+  }, [allProductTypes]);
 
   return (
     <>
@@ -191,13 +195,6 @@ export default function HomePage() {
             onClick={() => router.push("/estoque/inicio/adicionar_produto")}
           >
             Adicionar Produto <FaPlus />
-          </Button>
-
-          <Button
-            className={styles.header_button}
-            onClick={() => router.push("/estoque/inicio/adicionar_tipo_produto")}
-          >
-            Adicionar Tipo de Produto <FaPlus />
           </Button>
         </div>
       </CardHeader>
@@ -261,20 +258,22 @@ export default function HomePage() {
       <CardBody style={{ width: "90%" }}>
         {loading ? (
           <div className="text-center p-4">
-            <div className="spinner-border" role="status">
-              <span className="sr-only">Carregando...</span>
-            </div>
             <p>Carregando produtos...</p>
           </div>
         ) : produtos.length > 0 ? (
           <TableStyle
-            columnNames={["Id", "Imagem", "Nome", "Tipo"]}
-            data={produtos.map(produto => ({
-              id: produto.id,
-              imagem: produto.image || produto.imagem || "",
-              nome: produto.name || produto.nome,
-              tipo: produto.category?.name || produto.categoria?.nome || produto.tipo || "N/A"
-            }))}
+            columnNames={["Nº", "Descrição", "SKU", "Categoria", "Estoque"]}
+            data={produtos.map((produto, index) => {
+              const categoryName = produto.categoryName || "N/A";
+
+              return {
+                Nº: (number * size + index + 1).toString().padStart(2, '0'),
+                Descrição: produto.description || "N/A",
+                SKU: produto.sku || "N/A",
+                Categoria: categoryName,
+                Estoque: produto.quantityStock !== undefined ? produto.quantityStock : "N/A",
+              };
+            })}
           />
         ) : (
           <div className="text-center p-4">

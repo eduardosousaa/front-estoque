@@ -1,94 +1,202 @@
-"use client"
-import { useState, useRef } from "react";
+'use client';
+import React, { useState, useRef, useEffect } from "react";
 import { useRouter } from 'next/navigation';
 import { useForm } from "react-hook-form";
 import {
-  Input, Form, Row, Col, Button, CardHeader, CardBody,
-  Nav, NavItem, NavLink, Label, FormGroup
+  Form, Row, Col, Button, CardHeader, CardBody,
+  Alert
 } from 'reactstrap';
 import { IoArrowBackCircleSharp } from "react-icons/io5";
-import { FiUpload } from 'react-icons/fi';
 import InputForm from "@/components/ElementsUI/InputForm";
 import styles from '../../..//inicio/inicio.module.css';
-import styles2 from '@/styles/ModalAdicionarProduto.module.css'
+
+import Constantes from '@/Constantes';
+import { parseCookies } from 'nookies';
 
 export default function RegistrarSaida() {
+
+  const { "token2": token2 } = parseCookies();
 
   const {
     register,
     handleSubmit,
-    setError,
-    clearErrors,
-    control,
     setValue,
     formState: { errors },
   } = useForm({});
 
   const router = useRouter();
   const [etapa, setEtapa] = useState("informacoes");
-  
-  const fileInputRef = useRef(null);
-  const fileInputNotaRef = useRef(null);
-  const [previewImagem, setPreviewImagem] = useState(null);
-  const [nomeArquivoNota, setNomeArquivoNota] = useState('');
 
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const fileReader = new FileReader();
-      fileReader.onload = () => {
-        setPreviewImagem(fileReader.result);
-      };
-      fileReader.readAsDataURL(file);
+  const [loading, setLoading] = useState(false);
+  const [apiError, setApiError] = useState('');
+  const [apiSuccess, setApiSuccess] = useState('');
+
+  const [productEntries, setProductEntries] = useState([]);
+  const [locations, setLocations] = useState([]);
+
+  const fetchProductEntries = async () => {
+    try {
+      const response = await fetch(Constantes.url + `product_registration/input_product?page=0&size=100`, {
+        method: 'GET',
+        headers: {
+          'accept': 'application/json',
+          'Content-Type': 'application/json',
+          "Authorization": "Bearer " + token2,
+          "Module": "STOCK",
+        },
+      });
+      if (response.ok) {
+        const data = await response.json();
+        const entries = Array.isArray(data) ? data : data.content || [];
+        setProductEntries(entries);
+      } else {
+        console.error("Erro ao buscar entradas de produtos:", response.status, response.statusText);
+      }
+    } catch (err) {
+      console.error('Erro ao buscar entradas de produtos:', err);
     }
   };
 
-  const handleNotaFileChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setNomeArquivoNota(file.name);
+  const fetchLocations = async () => {
+    try {
+      const response = await fetch(Constantes.urlAdmin + `stock?typeLocation=LOCATION`, {
+        method: 'GET',
+        headers: {
+          'accept': 'application/json',
+          'Content-Type': 'application/json',
+          "Authorization": "Bearer " + token2,
+          "Module": "ADMINISTRATION",
+        },
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setLocations(Array.isArray(data) ? data : data.content || []);
+      } else {
+        console.error("Erro ao buscar localizações:", response.status, response.statusText);
+      }
+    } catch (err) {
+      console.error('Erro ao buscar localizações:', err);
     }
   };
 
-  const abrirSeletorArquivo = () => {
-    if (fileInputRef.current) {
-      fileInputRef.current.click();
+  useEffect(() => {
+    if (token2) {
+      fetchProductEntries();
+      fetchLocations();
     }
+  }, [token2]);
+
+  const createOutputProductObject = (data) => {
+    const parseTime = (timeString) => {
+      if (!timeString) return "00:00:00";
+      const [hours, minutes, seconds = '00'] = timeString.split(':');
+      return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    };
+
+    return {
+      inputProductId: data.entrada_selecionada,
+      hour: parseTime(data.hora),
+      quantity: parseInt(data.quantidade),
+      date: data.data_solicitacao,
+      locationId: data.setor_destino,
+      responsible: data.responsavel_retirada,
+    };
   };
 
-  const abrirSeletorNota = () => {
-    if (fileInputNotaRef.current) {
-      fileInputNotaRef.current.click();
+  const validateRequiredFields = (data) => {
+    const requiredFields = [
+      { field: 'entrada_selecionada', name: 'Entrada do Produto' },
+      { field: 'data_solicitacao', name: 'Data da solicitação' },
+      { field: 'quantidade', name: 'Quantidade' },
+      { field: 'responsavel_retirada', name: 'Responsável pela retirada' },
+      { field: 'setor_destino', name: 'Setor de destino' },
+      { field: 'hora', name: 'Hora' },
+    ];
+
+    const missingFields = requiredFields.filter(req => !data[req.field] || String(data[req.field]).trim() === '');
+
+    if (missingFields.length > 0) {
+      const fieldNames = missingFields.map(f => f.name).join(', ');
+      throw new Error(`Campos obrigatórios não preenchidos: ${fieldNames}`);
     }
+
+    return true;
   };
 
-  const SeletorImagemUpload = () => (
-    <>
-      <input
-        type="file"
-        ref={fileInputRef}
-        onChange={handleFileChange}
-        accept="image/*"
-        style={{ display: 'none' }}
-      />
+  async function submit(data) {
+    setLoading(true);
+    setApiError('');
+    setApiSuccess('');
 
-      <div className="upload-box" style={{
-        border: '2px dashed #ddd',
-        borderRadius: '8px',
-        padding: '20px',
-        textAlign: 'center',
-        cursor: 'pointer',
-        backgroundColor: '#f9f9f9'
-      }} onClick={abrirSeletorArquivo}>
-        <FiUpload size={24} color="#666" />
-        <p style={{ marginTop: '10px', marginBottom: '5px', color: '#666' }}>Upload</p>
-        <small style={{ color: '#999' }}>(.JPG ou PNG)</small>
-      </div>
-    </>
-  );
+    try {
+      validateRequiredFields(data);
 
-  function submit(data) {
-    console.log(data);
+      const outputProductObject = createOutputProductObject(data);
+
+      console.log('Dados de saída sendo enviados (JSON):', JSON.stringify(outputProductObject, null, 2));
+
+      const response = await fetch(Constantes.url + `product_registration/output_product`, {
+        method: 'POST',
+        headers: {
+          "Authorization": "Bearer " + token2,
+          "Module": "STOCK",
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(outputProductObject)
+      });
+
+      if (!response.ok) {
+        let errorMessage = `Erro ${response.status}: ${response.statusText}`;
+        const errorText = await response.text();
+        console.error("Raw error response text (Saída):", errorText);
+        try {
+          const contentType = response.headers.get("content-type");
+          if (contentType && contentType.includes("application/json")) {
+            const errorData = JSON.parse(errorText);
+            if (errorData.message) {
+              errorMessage = errorData.message;
+            } else if (errorData.error) {
+              errorMessage = errorData.error;
+            }
+          } else {
+            errorMessage = `Erro ${response.status}: ${response.statusText}. Resposta: ${errorText}`;
+          }
+        } catch (parseError) {
+          console.error("Erro ao parsear resposta de erro como JSON/Texto:", parseError);
+          errorMessage = `Erro ${response.status}: ${response.statusText}. Resposta ilegível.`;
+        }
+        throw new Error(errorMessage);
+      }
+
+      const successResponseText = await response.text();
+      console.log("Raw success response text (Saída):", successResponseText);
+
+      let result;
+      try {
+        if (successResponseText.trim() !== '') { 
+          result = JSON.parse(successResponseText);
+        } else {
+          result = { message: 'Sucesso, mas resposta vazia da API.' };
+        }
+      } catch (parseError) {
+        console.error("Erro ao parsear resposta de sucesso como JSON/Texto (Saída):", parseError);
+        result = { message: 'Sucesso, mas resposta ilegível da API.' };
+      }
+      
+      setApiSuccess(result.message || 'Registro de saída criado com sucesso!');
+
+      console.log('Registro de saída criado:', result);
+
+      setTimeout(() => {
+        router.push('/estoque/fluxo/saida');
+      }, 2000);
+
+    } catch (error) {
+      console.error('Erro ao registrar saída:', error);
+      setApiError(error.message || 'Erro ao registrar saída na API');
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (<>
@@ -98,6 +206,18 @@ export default function RegistrarSaida() {
       <h1 className={styles.header_h1}>Registrar Saída</h1>
     </CardHeader>
 
+    {apiError && (
+      <Alert color="danger" className="mx-3">
+        <strong>Erro:</strong> {apiError}
+      </Alert>
+    )}
+
+    {apiSuccess && (
+      <Alert color="success" className="mx-3">
+        <strong>Sucesso:</strong> {apiSuccess}
+      </Alert>
+    )}
+
     <CardBody style={{ width: "90%", backgroundColor: "#fff" }}>
       {etapa == "informacoes" && <>
         <Row className="d-flex mt-3">
@@ -105,63 +225,41 @@ export default function RegistrarSaida() {
             <Row className="d-flex mt-3">
               <Col sm="12">
                 <InputForm
-                  id="produto"
-                  name="produto"
-                  label="Produto"
-                  placeholder="Selecione um produto"
+                  id="entrada_selecionada"
+                  name="entrada_selecionada"
+                  label="Entrada do Produto *"
+                  placeholder="Selecione uma entrada de produto"
                   register={register}
-                  required={false}
+                  required={true}
                   type="select"
-                  options={[]}
+                  options={productEntries.map(entry => ({
+                    id: entry.id,
+                    name: `${entry.description || 'Produto sem descrição'} (ID: ${entry.id.substring(0, 8)}) - Qtd: ${entry.quantity || 0}`
+                  }))}
                 />
               </Col>
             </Row>
 
             <Row className="d-flex mt-3">
-              <Col sm="12">
-                <InputForm
-                  id="numero_nota_fiscal"
-                  name="numero_nota_fiscal"
-                  label="Número da Nota Fiscal"
-                  placeholder=""
-                  register={register}
-                  required={false}
-                  type="text"
-                />
-              </Col>
-            </Row>
-
-            <Row className="d-flex mt-3">
-              <Col sm="4">
-                <InputForm
-                  id="quantidade"
-                  name="quantidade"
-                  label="Quantidade"
-                  placeholder=""
-                  register={register}
-                  required={false}
-                  type="text"
-                />
-              </Col>
-              <Col sm="4">
+              <Col sm="6">
                 <InputForm
                   id="data_solicitacao"
                   name="data_solicitacao"
-                  label="Data da solicitação"
+                  label="Data da solicitação *"
                   placeholder=""
                   register={register}
-                  required={false}
+                  required={true}
                   type="date"
                 />
               </Col>
-              <Col sm="4">
+              <Col sm="6">
                 <InputForm
                   id="hora"
                   name="hora"
-                  label="Hora"
+                  label="Hora *"
                   placeholder=""
                   register={register}
-                  required={false}
+                  required={true}
                   type="time"
                 />
               </Col>
@@ -170,117 +268,40 @@ export default function RegistrarSaida() {
             <Row className="d-flex mt-3">
               <Col sm="6">
                 <InputForm
-                  id="responsavel_retirada"
-                  name="responsavel_retirada"
-                  label="Responsável pela retirada"
-                  placeholder=""
+                  id="quantidade"
+                  name="quantidade"
+                  label="Quantidade *"
+                  placeholder="0"
                   register={register}
-                  required={false}
+                  required={true}
                   type="text"
                 />
               </Col>
               <Col sm="6">
                 <InputForm
-                  id="setor_destino"
-                  name="setor_destino"
-                  label="Setor de destino"
-                  placeholder="Selecione um setor"
-                  register={register}
-                  required={false}
-                  type="select"
-                  options={[]}
-                />
-              </Col>
-            </Row>
-
-            <Row className="d-flex mt-3">
-              <Col sm="12">
-                <InputForm
-                  id="link_nota_fiscal"
-                  name="link_nota_fiscal"
-                  label="Inserir link da nota fiscal"
+                  id="responsavel_retirada"
+                  name="responsavel_retirada"
+                  label="Responsável pela retirada *"
                   placeholder=""
                   register={register}
-                  required={false}
+                  required={true}
                   type="text"
                 />
-                <div className="mt-2">
-                  <Button
-                    color="secondary"
-                    outline
-                    onClick={abrirSeletorNota}
-                    style={{ width: 'auto' }}
-                  >
-                    Anexar nota fiscal
-                  </Button>
-                </div>
               </Col>
             </Row>
 
             <Row className="d-flex mt-3">
               <Col sm="12">
                 <InputForm
-                  id="descricao"
-                  name="descricao"
-                  label="Descrição"
-                  placeholder=""
+                  id="setor_destino"
+                  name="setor_destino"
+                  label="Setor de destino *"
+                  placeholder="Selecione um setor"
                   register={register}
-                  required={false}
-                  type="textarea"
+                  required={true}
+                  type="select"
+                  options={locations.map(loc => ({ id: loc.id, name: loc.name || loc.description }))}
                 />
-              </Col>
-            </Row>
-
-            <Row className="d-flex mt-4">
-              <Col sm="12">
-                <h5>Condição do Produto</h5>
-                <FormGroup>
-                  <Label>
-                    <Input
-                      type="checkbox"
-                      {...register("entregue_prazo")}
-                    />
-                    {' '}Entregue no Prazo
-                  </Label>
-                </FormGroup>
-                <FormGroup>
-                  <Label>
-                    <Input
-                      type="checkbox"
-                      {...register("produto_boa_condicao")}
-                    />
-                    {' '}Produto em Boa condição
-                  </Label>
-                </FormGroup>
-                <FormGroup>
-                  <Label>
-                    <Input
-                      type="checkbox"
-                      {...register("quantidade_conforme")}
-                    />
-                    {' '}Quantidade conferida e conforme o pedido
-                  </Label>
-                </FormGroup>
-              </Col>
-            </Row>
-
-            <Row className="d-flex mt-4">
-              <Col sm="2">
-                <SeletorImagemUpload />
-              </Col>
-              <Col sm="2">
-                <div className="upload-box" style={{
-                  border: '2px dashed #ddd',
-                  borderRadius: '8px',
-                  padding: '20px',
-                  textAlign: 'center',
-                  cursor: 'pointer',
-                  backgroundColor: '#f9f9f9'
-                }} onClick={abrirSeletorNota}>
-                  <FiUpload size={24} color="#666" />
-                  <p style={{ marginTop: '10px', marginBottom: '5px', color: '#666' }}>Upload</p>
-                  <small style={{ color: '#999' }}>(.JPG ou PNG)</small>
-                </div>
               </Col>
             </Row>
 
@@ -292,14 +313,6 @@ export default function RegistrarSaida() {
                 </p>
               </Col>
             </Row>
-
-            <input
-              type="file"
-              ref={fileInputNotaRef}
-              onChange={handleNotaFileChange}
-              accept=".pdf,.jpg,.jpeg,.png"
-              style={{ display: 'none' }}
-            />
 
             <Row className="d-flex mt-4 justify-content-end">
               <Col sm="auto">
@@ -315,8 +328,9 @@ export default function RegistrarSaida() {
                 <Button
                   color="success"
                   onClick={handleSubmit(submit)}
+                  disabled={loading}
                 >
-                  Registrar
+                  {loading ? 'Registrando...' : 'Registrar'}
                 </Button>
               </Col>
             </Row>
@@ -324,6 +338,5 @@ export default function RegistrarSaida() {
         </Row>
       </>}
     </CardBody>
-
   </>);
 }

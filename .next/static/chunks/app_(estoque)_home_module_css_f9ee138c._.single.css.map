@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 1, "column": 0}, "map": {"version":3,"sources":["turbopack:///[project]/app/(estoque)/home.module.css"],"sourcesContent":[".contentArea {\r\n    margin-left: 150px;\r\n    width: 86%;\r\n    height: 100vh;\r\n}\r\n\r\n.expanded {\r\n    margin-left: 250px;\r\n    width: 81.3%;\r\n}\r\n\r\n.container {\r\n    box-sizing: border-box;\r\n    height: auto;\r\n    max-width: 100%;\r\n    background-color: #f8ffff;\r\n    border-radius: 25px;\r\n    margin-top: 100px;\r\n    margin-left: 40px;;\r\n    box-shadow: 0px 0px 39.5px 0px rgba(0, 0, 0, 0.20);\r\n    align-items: center;\r\n    padding: 20px;\r\n}\r\n\r\n.container h1 {\r\n    color: #000;\r\n    font-size: 2.5rem;\r\n    text-align: center;\r\n    margin-bottom: 20px;\r\n}\r\n\r\n.heading {\r\n    color: #000;\r\n    font-size: 2.5rem;\r\n    text-align: center;\r\n    margin-bottom: 20px;\r\n    font-weight: bold;\r\n}"],"names":[],"mappings":"AAAA;;;;;;AAMA;;;;;AAKA;;;;;;;;;;;;;AAaA;;;;;;;AAOA"}}]
+}

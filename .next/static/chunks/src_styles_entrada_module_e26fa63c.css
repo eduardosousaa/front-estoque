@@ -1,0 +1,105 @@
+/* [project]/src/styles/entrada.module.css [app-client] (css) */
+.entrada-module__uV-nfW__header {
+  background-color: #fff;
+  border-bottom: 1px solid #e0e0e0;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  display: flex;
+}
+
+.entrada-module__uV-nfW__header_h1 {
+  color: #333;
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 600;
+}
+
+.entrada-module__uV-nfW__tabs {
+  border-bottom: 1px solid #e0e0e0;
+  margin-bottom: 2rem;
+  display: flex;
+}
+
+.entrada-module__uV-nfW__tab {
+  color: #999;
+  cursor: pointer;
+  border-bottom: 2px solid #0000;
+  padding: .75rem 2rem;
+  font-weight: 500;
+  transition: all .3s;
+}
+
+.entrada-module__uV-nfW__tab:hover {
+  color: #009e8b;
+}
+
+.entrada-module__uV-nfW__tabActive {
+  color: #009e8b;
+  cursor: pointer;
+  border-bottom: 2px solid #009e8b;
+  padding: .75rem 2rem;
+  font-weight: 600;
+}
+
+.entrada-module__uV-nfW__registrarButton {
+  background-color: #009e8b;
+  border: none;
+  border-radius: 6px;
+  margin-bottom: 2rem;
+  padding: .5rem 1.5rem;
+  font-weight: 500;
+  transition: background-color .3s;
+}
+
+.entrada-module__uV-nfW__registrarButton:hover {
+  background-color: #008c7a;
+}
+
+.entrada-module__uV-nfW__inputWrapper {
+  align-items: center;
+  display: flex;
+  position: relative;
+}
+
+.entrada-module__uV-nfW__inputWrapper input {
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  width: 100%;
+  padding: .6rem .75rem .6rem 2.5rem;
+  font-size: .95rem;
+  transition: border-color .3s;
+}
+
+.entrada-module__uV-nfW__inputWrapper input:focus {
+  border-color: #009e8b;
+  outline: none;
+}
+
+.entrada-module__uV-nfW__iconeBusca {
+  color: #999;
+  z-index: 1;
+  position: absolute;
+  left: .75rem;
+}
+
+.entrada-module__uV-nfW__emptyState {
+  text-align: center;
+  color: #999;
+  padding: 4rem 2rem;
+}
+
+.entrada-module__uV-nfW__emptyState p {
+  color: #666;
+  margin: 1rem 0 .5rem;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.entrada-module__uV-nfW__emptyState span {
+  color: #999;
+  font-size: .9rem;
+}
+
+
+/*# sourceMappingURL=src_styles_entrada_module_e26fa63c.css.map*/

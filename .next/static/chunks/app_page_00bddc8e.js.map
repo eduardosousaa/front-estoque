@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 7, "column": 0}, "map": {"version":3,"sources":["file://C%3A/Users/eduar/OneDrive/Documentos/estagio/front-estoque/app/page.js"],"sourcesContent":["\"use client\";\r\nimport { useEffect } from \"react\";\r\nimport { useRouter } from \"next/navigation\";\r\n\r\nexport default function Home() {\r\n  const router = useRouter();\r\n\r\n  useEffect(() => {\r\n    router.replace(\"/login\");\r\n  }, [router]);\r\n\r\n  return null;\r\n}\r\n"],"names":[],"mappings":";;;AACA;AACA;;AAFA;;;AAIe,SAAS;;IACtB,MAAM,SAAS,CAAA,GAAA,qIAAA,CAAA,YAAS,AAAD;IAEvB,CAAA,GAAA,6JAAA,CAAA,YAAS,AAAD;0BAAE;YACR,OAAO,OAAO,CAAC;QACjB;yBAAG;QAAC;KAAO;IAEX,OAAO;AACT;GARwB;;QACP,qIAAA,CAAA,YAAS;;;KADF","debugId":null}}]
+}

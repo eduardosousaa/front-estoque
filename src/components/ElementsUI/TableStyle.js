@@ -14,15 +14,17 @@ export default function TableStyle({columnNames,data}){
             </thead>
             <tbody>
                 { data.map((e,index)  => 
-                  <tr key={index}>
-                    {Object.keys(e).map((prop,index2) =>  
-                       <td key={index2} style={{backgroundColor:"#ddffff", borderBottomWidth:0,
-                                    ...((index == data.length - 1 && index2 == 0) && { borderBottomLeftRadius: "15px"}),
-                                    ...((index == data.length - 1 && index2 == Object.keys(e).length -1 ) && { borderBottomRightRadius: "15px"}),
-                                  }}>
-                            {e[prop]}
-                       </td>
-                    )}
+                  <tr key={e.id || index}>
+                    {columnNames.map((columnName, index2) => {
+                       return (
+                         <td key={index2} style={{backgroundColor:"#ddffff", borderBottomWidth:0,
+                                      ...((index == data.length - 1 && index2 == 0) && { borderBottomLeftRadius: "15px"}),
+                                      ...((index == data.length - 1 && index2 == columnNames.length -1 ) && { borderBottomRightRadius: "15px"}),
+                                    }}>
+                              {e[columnName]}
+                         </td>
+                       );
+                    })}
                   </tr>
                 )}
             </tbody>

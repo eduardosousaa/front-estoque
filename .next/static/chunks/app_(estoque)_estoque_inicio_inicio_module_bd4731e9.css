@@ -1,0 +1,263 @@
+/* [project]/app/(estoque)/estoque/inicio/inicio.module.css [app-client] (css) */
+.inicio-module__uApqwW__container {
+  background-color: #fff;
+  border-radius: 12px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+  font-family: sans-serif;
+  box-shadow: 0 2px 10px #0000000d;
+}
+
+.inicio-module__uApqwW__titulo {
+  text-align: center;
+  color: #333;
+  margin-bottom: 24px;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.inicio-module__uApqwW__headerAcoes {
+  justify-content: flex-end;
+  gap: 12px;
+  margin-bottom: 24px;
+  display: flex;
+}
+
+.inicio-module__uApqwW__botaoAcao {
+  color: #fff;
+  cursor: pointer;
+  background-color: #34b3ad;
+  border: none;
+  border-radius: 8px;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 14px;
+  font-weight: 500;
+  transition: background-color .2s;
+  display: flex;
+}
+
+.inicio-module__uApqwW__botaoAcao:hover {
+  background-color: #2a9994;
+}
+
+.inicio-module__uApqwW__filtros {
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  display: flex;
+}
+
+.inicio-module__uApqwW__inputWrapper {
+  background: #f5f5f5;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  flex: 1;
+  align-items: center;
+  height: 50px;
+  padding: 8px 12px;
+  display: flex;
+}
+
+.inicio-module__uApqwW__inputWrapper input {
+  background: none;
+  border: none;
+  outline: none;
+  flex: 1;
+  padding-left: 8px;
+  font-size: 14px;
+}
+
+.inicio-module__uApqwW__iconeBusca {
+  color: #888;
+}
+
+.inicio-module__uApqwW__categoriaFiltro {
+  align-items: center;
+  gap: 6px;
+  display: flex;
+}
+
+.inicio-module__uApqwW__categoriaFiltro select {
+  background-color: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  outline: none;
+  min-width: 160px;
+  padding: 9px 12px;
+  font-size: 14px;
+}
+
+.inicio-module__uApqwW__botaoMais {
+  cursor: pointer;
+  color: #666;
+  background-color: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 50%;
+  justify-content: center;
+  align-items: center;
+  width: 32px;
+  height: 32px;
+  display: flex;
+}
+
+.inicio-module__uApqwW__botaoMais:hover {
+  background-color: #f5f5f5;
+}
+
+.inicio-module__uApqwW__botaoPesquisar {
+  color: #333;
+  cursor: pointer;
+  background-color: #b0e9e7;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-weight: 500;
+  transition: background-color .2s;
+}
+
+.inicio-module__uApqwW__botaoPesquisar:hover {
+  background-color: #9ddfdd;
+}
+
+.inicio-module__uApqwW__resultado {
+  min-height: 200px;
+  margin-top: 40px;
+}
+
+.inicio-module__uApqwW__listaProdutos {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+.inicio-module__uApqwW__itemProduto {
+  border-bottom: 1px solid #eee;
+  padding: 12px;
+}
+
+.inicio-module__uApqwW__itemProduto:hover {
+  background-color: #f9f9f9;
+}
+
+.inicio-module__uApqwW__estadoVazio {
+  text-align: center;
+  color: #777;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 40px 0;
+  display: flex;
+}
+
+.inicio-module__uApqwW__iconeEmbalagem {
+  margin-bottom: 16px;
+}
+
+.inicio-module__uApqwW__textoAjuda {
+  color: #999;
+  margin-top: -5px;
+  font-size: 14px;
+}
+
+.inicio-module__uApqwW__botaoLimpar {
+  color: #fff;
+  cursor: pointer;
+  background-color: #34b3ad;
+  border: none;
+  border-radius: 6px;
+  margin-top: 10px;
+  padding: 8px 14px;
+  font-weight: 500;
+  transition: background-color .2s;
+}
+
+.inicio-module__uApqwW__botaoLimpar:hover {
+  background-color: #2a9994;
+}
+
+@media (width <= 768px) {
+  .inicio-module__uApqwW__filtros {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .inicio-module__uApqwW__categoriaFiltro {
+    margin-top: 12px;
+  }
+
+  .inicio-module__uApqwW__headerAcoes {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .inicio-module__uApqwW__botaoAcao {
+    justify-content: center;
+  }
+}
+
+.inicio-module__uApqwW__header {
+  background-color: #0000;
+  border-bottom: 1px solid #727272;
+  justify-content: space-between;
+  width: 95%;
+  padding-right: 20px;
+  display: flex;
+}
+
+.inicio-module__uApqwW__header_h1 {
+  color: #000;
+  margin-top: 15px;
+  margin-bottom: 10px;
+  margin-left: 20px;
+  font-family: Roboto, sans-serif;
+  font-size: 40px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.inicio-module__uApqwW__header_buttons {
+  gap: 10px;
+  display: flex;
+}
+
+.inicio-module__uApqwW__header_button {
+  cursor: pointer;
+  color: #fff;
+  background-color: #009e8b;
+  border: 1px solid #ffffffad;
+  border-radius: 10px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  min-width: 200px;
+  height: 45px;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  padding: 10px;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: transform .5s;
+  display: flex;
+}
+
+.inicio-module__uApqwW__header_button:hover {
+  background-color: #009e8b;
+  transform: scale(1.05);
+}
+
+.inicio-module__uApqwW__navbar {
+  justify-content: flex-start;
+  width: 90%;
+  margin-top: 20px;
+  font-size: 22px;
+}
+
+.inicio-module__uApqwW__navlink {
+  color: #000;
+}
+
+
+/*# sourceMappingURL=app_%28estoque%29_estoque_inicio_inicio_module_bd4731e9.css.map*/

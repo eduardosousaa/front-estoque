@@ -1,6 +1,7 @@
 import { FormGroup, Label, Input } from "reactstrap";
 
-export default function InputForm({ id, name, label, register, required, placeholder, onChange, type, options, errors }) {
+// ADICIONE 'value' aos parâmetros da função InputForm
+export default function InputForm({ id, name, label, register, required, placeholder, onChange, type, options, errors, value }) { 
 
   const { ref, ...registerField } = register(`${name}`,
     {
@@ -49,11 +50,12 @@ export default function InputForm({ id, name, label, register, required, placeho
           name={name}
           innerRef={ref}
           {...registerField}
+          value={value} // ADICIONE ESTA LINHA para que o Input seja controlado pelo React
           style={{ height: "50px" }}
         >
           <option value="">Selecione...</option>
-          {options.map((option) => (
-            <option key={option.id} value={option.id}>
+          {options.map((option, index) => (
+            <option key={option.id || index} value={option.id}>
               {option.name}
             </option>
           ))}
