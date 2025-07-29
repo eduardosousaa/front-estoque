@@ -3,6 +3,7 @@ import {useState, useEffect, createContext} from "react";
 import {useRouter, usePathname} from "next/navigation";
 import Constantes from '../Constantes';
 import {parseCookies,setCookie} from "nookies";
+import LoadingGif from "../Components/ElementsUI/LoadingGif";
 
 export const AuthContext = createContext({});
 export function AuthProvider({children}) {
@@ -24,7 +25,7 @@ export function AuthProvider({children}) {
 
     async function signIn(username,password){ 
         
-        await fetch(Constantes.urlAdmin + 'admin/login', {
+        await fetch(Constantes.urlBackAdmin + 'admin/login', {
                   method: 'POST',
                   headers: {
                       'Content-Type': 'application/json',
@@ -49,7 +50,7 @@ export function AuthProvider({children}) {
                           });
                           setCookie(undefined,"contas",JSON.stringify(body),{path:"/"});
                           getInfo(headers,body[0].id);
-                          router.push("/estoque");
+                          router.push("/custos");
                         break;
                         case 400:
                           console.log("erro:",body);
@@ -68,12 +69,12 @@ export function AuthProvider({children}) {
 
     async function getInfo(token1,id){ 
        
-        await fetch(Constantes.urlAdmin + 'admin/info?' + new URLSearchParams({accountId: id}), {
+        await fetch(Constantes.urlBackAdmin + 'admin/info?' + new URLSearchParams({accountId: id}), {
                      method: 'GET',
                      headers: {
                          'Content-Type': 'application/json',
                          'Module': 'ADMINISTRATION',
-                         'Authorization': token1
+                         'Authorization': `Bearer ${token1}`
                      },
                      }).then((response) => 
                         response.json().then(data => ({
@@ -119,19 +120,24 @@ export function AuthProvider({children}) {
       if(token1 == undefined){
         router.push("/login");
       }else{
-        if(pathname.includes("estoque") || pathname.includes("/login")){
+        /* if(pathname.includes("estoque") || pathname.includes("/login")){
            router.push(pathname);
         }else{
            router.push("/estoque")
         }  
-
+ */
         if(contas != undefined){
           let contasParse = JSON.parse(contas);
           let index = contasParse.findIndex((conta) => conta.principal == true);
           getInfo(token1,contasParse[index].id);
         }
       }
+      setLoading(false);
    },[]);
+
+   if(loading){
+     return (<LoadingGif/>);
+   }
    
    return (
 

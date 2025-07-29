@@ -1,6 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 7, "column": 0}, "map": {"version":3,"sources":["file://C%3A/Users/eduar/OneDrive/Documentos/estagio/front-estoque/app/%28estoque%29/estoque/page.js"],"sourcesContent":["\r\n\"use client\"\r\nimport styles from '../home.module.css';\r\n\r\nexport default function Page() {\r\n  return (\r\n    <h1 className={styles.heading}>Bem vindo!</h1>\r\n  );\r\n}"],"names":[],"mappings":";;;;AAEA;AADA;;;AAGe,SAAS;IACtB,qBACE,6LAAC;QAAG,WAAW,yIAAA,CAAA,UAAM,CAAC,OAAO;kBAAE;;;;;;AAEnC;KAJwB","debugId":null}}]
-}

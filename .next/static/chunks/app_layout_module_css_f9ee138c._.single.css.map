@@ -1,6 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 1, "column": 0}, "map": {"version":3,"sources":["turbopack:///[project]/app/layout.module.css"],"sourcesContent":[".root{\n    margin: 0;\n    padding: 0;\n    height: 100vh;\n    background-color: #dff;\n    overflow: auto;\n    font-family:  system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", \n                 \"Noto Sans\", \"Liberation Sans\", Arial, sans-serif, \"Apple Color Emoji\", \n                 \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\";\n}"],"names":[],"mappings":"AAAA"}}]
-}

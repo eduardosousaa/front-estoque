@@ -1,12 +1,15 @@
 export default class Constantes {
-    // URLs de TESTE
-    static urlAdmin="https://teste-api.smartdatasolutions.com.br/administration/"
-    static url="https://teste-api.smartdatasolutions.com.br/stock/"
-    static urlProductRoot="https://teste-api.smartdatasolutions.com.br/"
-    static urlProductRegistration="https://teste-api.smartdatasolutions.com.br/product_registration/"
-    static urlReports="https://teste-api.smartdatasolutions.com.br/report/"
-    // Produção:
-    // static urlAdmin="https://frota-api.smartdatasolutions.com.br/administration/"
-    // static url="https://frota-api.smartdatasolutions.com.br/stock/"
-    // static urlProductRegistration="https://frota-api.smartdatasolutions.com.br/product_registration/"
+    static urlBackAdmin= process.env.NEXT_PUBLIC_URL_BACK_ADMIN;
+    static urlBackPatrimony= process.env.NEXT_PUBLIC_URL_BACK_PATRIMONY;
+    static urlBackDocuments= process.env.NEXT_PUBLIC_URL_BACK_DOCUMENTS;
+    static urlBackStock= process.env.NEXT_PUBLIC_URL_BACK_STOCK
+    static urlBackCosts= process.env.NEXT_PUBLIC_URL_BACK_COSTS;
+    static urlImages= process.env.NEXT_PUBLIC_URL_IMAGES;
+
+    /* Módulos */
+    static urlFrontAdmin= process.env.NEXT_PUBLIC_URL_FRONT_ADMIN //Atual
+    static urlFrontRoutes= process.env.NEXT_PUBLIC_URL_FRONT_ROUTES
+    static urlFrontStock= process.env.NEXT_PUBLIC_URL_FRONT_STOCK
+    static urlFrontPatrimony= process.env.NEXT_PUBLIC_URL_FRONT_PATRIMONY
+    static urlFrontCosts= process.env.NEXT_PUBLIC_URL_FRONT_COSTS
 }

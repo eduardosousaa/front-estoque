@@ -2,7 +2,7 @@
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { parseCookies, setCookie } from "nookies";
-import { AuthProvider } from "@/Context/AuthContext";
+import { AuthProvider } from "../src/Context/AuthContext";
 import styles from "./layout.module.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
 

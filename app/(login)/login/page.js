@@ -1,7 +1,7 @@
 "use client"
 import { useState, useContext } from 'react';
 import { useRouter } from "next/navigation";
-import styles from './login.module.css';
+import styles from '../login.module.css';
 import { AuthContext } from '../../../src/Context/AuthContext';
 
 export default function Page() {
@@ -25,30 +25,32 @@ export default function Page() {
   return (
 
     <>
-      <img src={"carrinho.png"} alt="" className={styles.chaveiro} />
-      <form onSubmit={handleSubmit} className={styles.cabecaLogin}>
-        <img src={"logo_SS.png"} alt="" />
-        <h1>Bem vindo</h1>
+     <form onSubmit={handleSubmit} className={styles.cabecaLogin}>
+        <img src={"logo.svg"} alt="" />
+        <h1>Gestão de Frotas Escolares</h1>
+        
+        {/* {error && <p className={styles.errorMessage}>Tente Novamente</p>} */}
         <label htmlFor="">
-          <input type="" placeholder='Usuário: '
-            id="username"
-            name="username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required />
+            <input type="" placeholder='Usuário: ' 
+                            id="username"
+                            name="username"
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)} 
+                            required/>
         </label>
         <label htmlFor="">
-          <input type={/* showPassword ? "text" :  */"password"}
-            id="password"
-            name="password"
-            placeholder="Senha:"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required />
+            <input  type={/* showPassword ? "text" :  */"password"}
+                            id="password"
+                            name="password"
+                            placeholder="Senha:"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)} 
+                            required/>
         </label>
         <button type='submit' >Entrar</button>
-
-      </form>
+  
+     </form>
+     <img src={"logimage.svg"} alt="" className={styles.chaveiro}/>  
     </>
   );
 }

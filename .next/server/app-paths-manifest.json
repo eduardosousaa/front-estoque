@@ -1,8 +1,0 @@
-{
-  "/(estoque)/estoque/fluxo/entrada/page": "app/(estoque)/estoque/fluxo/entrada/page.js",
-  "/(estoque)/estoque/inicio/page": "app/(estoque)/estoque/inicio/page.js",
-  "/(estoque)/estoque/page": "app/(estoque)/estoque/page.js",
-  "/(estoque)/estoque/relatorio/page": "app/(estoque)/estoque/relatorio/page.js",
-  "/(login)/login/page": "app/(login)/login/page.js",
-  "/page": "app/page.js"
-}

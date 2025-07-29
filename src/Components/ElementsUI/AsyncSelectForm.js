@@ -1,10 +1,28 @@
-import {FormGroup, Label, Input} from "reactstrap";
+import {FormGroup, Label, Control} from "reactstrap";
+import AsyncSelect from 'react-select/async';
 
-export default function InputForm({id, name, label, register, required, placeholder,disabled, onChange, type, min, options,errors, props}){
+export default function AsyncSelectForm({
+  id, 
+  name, 
+  label, 
+  register, 
+  required, 
+  defaultValue, 
+  onChange, 
+  isMulti, 
+  options, 
+  errors,
+  control,
+  isDisabled, 
+  cacheOptions}){
 
-    const  { ref, ...registerField } =  register(`${name}`,
+    /* const  { ref, ...registerField } =  register(`${name}`,
                                          { required: required || false,
-                                           onChange: onChange || null})
+                                           onChange: onChange || null}) */
+
+    const styles = {
+      control: styles => ({ ...styles, minHeight: '50px' }),
+    };
 
     function checkSubErrors(){
       if(errors){
@@ -27,7 +45,7 @@ export default function InputForm({id, name, label, register, required, placehol
           let name1 = name.split("[")[0];
           let index = (name.split("[")[1]).split("]")[0];
           let name2 = name.split(".")[1];
-
+            
           if(name2 == undefined && errors?.[name1]?.[index]){
               return <><div style={{color:"red",fontWeight: "300"}}>{ errors[name1][index].message || "Campo Obrigatório"}</div><br/></>;
           }
@@ -50,42 +68,30 @@ export default function InputForm({id, name, label, register, required, placehol
               }
               
           }
-
-
-         }
+          
+        }
       }
     }
 
     return (
       <FormGroup style={{width:"100%"}}>
 
-          {label != "" &&
+        { label != "" &&
           <Label style={{height:"25px",fontSize:"18px"}}
                  for={id}>
             {label}
           </Label>}
-          <Input style={{height: type == "textarea" ? "130px": "50px"}}
-            {...props}
-            id={id}
-            name={name}
-            placeholder={placeholder}
-            innerRef = {ref}
-            { ...disabled ? disabled={disabled} : null }
-            { ...registerField}
-            { ...min ? min={min} : null}
-            { ...onChange ? onChange={onChange} : null}
-            type={type}>
-            
-            { type == "select" ? <>
-              <option value="" hidden>{placeholder}</option>
-              {options.map((option) => {return (
-               <option key={option.id} value={option.id}>{option.name}</option>
-              )})}
-             </>
-             : null}
-          </Input>
+        <AsyncSelect styles={styles} 
+                     { ...isMulti == true ? isMulti={isMulti} : null}
+                     placeholder={'--Selecione--'}
+                     { ...register ?  {...register(`${name}`,{required: required})} : null}
+                     cacheOptions defaultOptions loadOptions={options}
+                     { ...defaultValue ? defaultValue={defaultValue} : null }
+                     { ...isDisabled ? isDisabled={isDisabled} : null }
+                     onChange={onChange}
+                     />
 
-          { name.includes(".") || (name.includes("[") && name.includes("]")) ?
+        { name.includes(".") || (name.includes("[") && name.includes("]")) ?
             checkSubErrors() :
             errors?.[name] && <div style={{color:"red",fontWeight: "300"}}>{errors[name].message || "Campo Obrigatório"}</div>}
       </FormGroup>
